@@ -32,7 +32,7 @@ WORKDIR /tmp
 COPY MOSfieldutils_0.4.4.tar.gz /tmp
 RUN R -e 'install.packages("MOSfieldutils_0.4.4.tar.gz", repos=NULL, type="source")'
 
-FROM rockylinux:8
+FROM rockylinux/rockylinux:8
 
 RUN rpm -ivh https://download.fmi.fi/smartmet-open/rhel/8/x86_64/smartmet-open-release-21.3.26-2.el8.fmi.noarch.rpm && \
     dnf -y install dnf-plugins-core && \
