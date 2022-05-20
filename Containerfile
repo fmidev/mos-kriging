@@ -43,7 +43,7 @@ COPY --from=builder /usr/lib64/R/library /usr/lib64/R/library
 
 ADD mandtg /usr/local/bin
 ADD MOStoECgrid.R /tmp
-ADD run.sh /tmp
+ADD run-kriging.sh /tmp
 ADD download-background.sh /tmp
 ADD download-mos.sh /tmp
 ADD convert.sh /tmp
