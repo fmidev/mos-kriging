@@ -380,7 +380,6 @@ for LL in $*; do
   fi
 
   sh /tmp/download-background.sh $DTG `expr $LL + $STEP`
-  DTG=`mandtg $DTG + $STEP`
 
   if [ $LL -gt 144 ]; then
     process_6h $DTG $LL
