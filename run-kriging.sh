@@ -72,7 +72,9 @@ do_kriging(){
 
   echo "GRIDDING_${DTG}/fc_${LL} Done: `date`"
   echo "Wrote file $fc_out"
-
+  export DTG
+  export TYPE=development
+  sh copy-to-lake.sh $fc_out
 }
 
 for LL in $*; do
