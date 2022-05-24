@@ -37,7 +37,7 @@ FROM rockylinux/rockylinux:8
 RUN rpm -ivh https://download.fmi.fi/smartmet-open/rhel/8/x86_64/smartmet-open-release-21.3.26-2.el8.fmi.noarch.rpm && \
     dnf -y install dnf-plugins-core && \
     dnf config-manager --set-enabled powertools && \
-    dnf -y install epel-release && dnf -y install R-core netcdf eccodes cdo proj geos gdal && dnf clean all && rm -rf /var/cache/yum
+    dnf -y install epel-release && dnf -y install s3cmd R-core netcdf eccodes cdo proj geos gdal && dnf clean all && rm -rf /var/cache/yum
 
 COPY --from=builder /usr/lib64/R/library /usr/lib64/R/library
 
@@ -48,4 +48,5 @@ ADD download-background.sh /tmp
 ADD download-mos.sh /tmp
 ADD convert.sh /tmp
 ADD start.sh /tmp
+ADD copy-to-lake.sh /tmp
 WORKDIR /tmp
