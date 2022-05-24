@@ -8,6 +8,27 @@ shift
 export POSSE_EC=/tmp/ecmwf/
 mkdir -p /tmp/out
 
+producer_id=120
+
+if [ $TYPE = "development" ]; then
+  producer_id=122
+fi
+
+fix_grib_metadata(){
+  LL=$1
+  filein=$2
+
+  dataDate=$(echo $DTG | cut -c 1-8)
+  dataTime=$(echo 100 \* $(echo $DTG | cut -c 9-10) | bc)
+#  grib_set -s indicatorOfTypeOfLevel=105,centre=86,generatingProcessIdentifier=$producer_id,dataDate=$dataDate,dataTime=$dataTime,startStep=$fstep,endStep=$LL $filein.orig $filein
+
+  grib_set -S -s indicatorOfTypeOfLevel=105,centre=86,generatingProcessIdentifier=$producer_id,dataDate=$dataDate,dataTime=$dataTime,startStep=$LL,endStep=$LL,timeRangeIndicator=0 -w indicatorOfParameter=167/168/129 $filein out-instant.grib
+  grib_set -S -s indicatorOfTypeOfLevel=105,centre=86,generatingProcessIdentifier=$producer_id,dataDate=$dataDate,dataTime=$dataTime,timeRangeIndicator=2 -w indicatorOfParameter=mn2t/mx2t $filein out-aggregated.grib
+
+  grib_set -s level=2 -w shortName!=z out-*.grib $filein
+
+}
+
 do_kriging(){
   DTG=$1
   LL=$2
@@ -20,8 +41,7 @@ do_kriging(){
     LLINT=6
   fi
 
-  LL=$LLINT
-  FCDTG=`mandtg $DTG + $LLINT`
+  FCDTG=`mandtg $DTG + $LL`
 
   YEAR=`mandtg -year $FCDTG`
   MONTH=`mandtg -month $FCDTG`
@@ -30,7 +50,7 @@ do_kriging(){
 
   This_step=MOS_${DTG}_${LL}_${YEAR}${MONTH}${DAY}${HOUR}.csv
 
-  fc_out=/tmp/out/init_${DTG}_${LL}_fc_${YEAR}${MONTH}${DAY}${HOUR}
+  fc_out=/tmp/out/fc${DTG}+$(printf "%03d" $LL)h
 
   This_step_ECbg=fc_${YEAR}${MONTH}${DAY}_${HOUR}.grib
 
@@ -71,10 +91,10 @@ do_kriging(){
   fi
 
   echo "GRIDDING_${DTG}/fc_${LL} Done: `date`"
-  echo "Wrote file $fc_out"
-  export DTG
-  export TYPE=development
-  sh copy-to-lake.sh $fc_out
+  fix_grib_metadata $LL $fc_out.grib
+
+  echo "Wrote file $fc_out.grib"
+  sh /tmp/copy-to-lake.sh $fc_out.grib
 }
 
 for LL in $*; do
