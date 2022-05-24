@@ -10,6 +10,6 @@ for filename in $*; do
     --host-bucket='' \
     --access_key $S3_ACCESS_KEY_ID \
     --secret_key $S3_SECRET_ACCESS_KEY \
-    put $filename s3://mos-data/$TYPE/$DTG/$(basename $filename)
+    put $filename s3://routines-data/mos/kriging/$TYPE/$DTG/$(basename $filename)
 done
 
