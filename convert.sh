@@ -26,6 +26,7 @@ rm -rf ${POSSE_EC}/TEMP_kriging/F5D*
 process_3h(){
   DTG=$1
   LL=$2
+  DTG=$(mandtg $DTG + $LL)
   YEAR=`mandtg -year $DTG`
   MONTH=`mandtg -month $DTG`
   DAY=`mandtg -day $DTG`
@@ -198,7 +199,7 @@ process_6h() {
 
   DTG=$1
   LL=$2
- 
+  DTG=$(mandtg $DTG + $LL)
   YEAR=`mandtg -year $DTG`
   MONTH=`mandtg -month $DTG`
   DAY=`mandtg -day $DTG`
