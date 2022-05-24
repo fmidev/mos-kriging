@@ -1,4 +1,4 @@
-set -uxe
+set -ue
 
 makefilename(){
   analtime=$1
@@ -23,6 +23,7 @@ download() {
     fi
   fi
 
+  set -x
   curl --fail --show-error -o /tmp/ecmwf/$file https://lake.fmi.fi/routines-data/mos/F5D/$file
 
 }
