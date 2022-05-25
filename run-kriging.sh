@@ -18,6 +18,8 @@ fix_grib_metadata(){
   LL=$1
   filein=$2
 
+  rm -f out-*grib
+
   dataDate=$(echo $DTG | cut -c 1-8)
   dataTime=$(echo 100 \* $(echo $DTG | cut -c 9-10) | bc)
 #  grib_set -s indicatorOfTypeOfLevel=105,centre=86,generatingProcessIdentifier=$producer_id,dataDate=$dataDate,dataTime=$dataTime,startStep=$fstep,endStep=$LL $filein.orig $filein
