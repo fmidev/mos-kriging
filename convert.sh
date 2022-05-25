@@ -24,17 +24,17 @@ rm -rf ${POSSE_EC}/TEMP_kriging/F5D*
 #*********************************************
 
 process_3h(){
-  DTG=$1
+  NDTG=$1
   LL=$2
-  DTG=$(mandtg $DTG + $LL)
-  YEAR=`mandtg -year $DTG`
-  MONTH=`mandtg -month $DTG`
-  DAY=`mandtg -day $DTG`
-  HOUR=`mandtg -hour $DTG`
+  NDTG=$(mandtg $NDTG + $LL)
+  YEAR=`mandtg -year $NDTG`
+  MONTH=`mandtg -month $NDTG`
+  DAY=`mandtg -day $NDTG`
+  HOUR=`mandtg -hour $NDTG`
   FCLENGTH=${MONTH}${DAY}${HOUR}
 
   #Take care of mx2t6 and mn2t6 for every 3'rd hour step, EC does not contain these.....
-  DTG_p3=`mandtg $DTG + 3`
+  DTG_p3=`mandtg $NDTG + 3`
   YEAR_p3=`mandtg -year $DTG_p3`
   MONTH_p3=`mandtg -month $DTG_p3`
   DAY_p3=`mandtg -day $DTG_p3`
@@ -100,8 +100,8 @@ process_3h(){
     cd $POSSE_EC/Comb
 
     #Calculate the average value over a set of time-steps, put into new file
-    cdo ensmean -cat mx2t_*.grib prev12h_mx2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
-    cdo ensmean -cat mn2t_*.grib prev12h_mn2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
+    cdo ensmean mx2t_*.grib prev12h_mx2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
+    cdo ensmean mn2t_*.grib prev12h_mn2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
 
     #Select each parameter and put into new file-name
     cdo -select,name=var167 ${POSSE_EC}/TEMP_kriging/F5D_${YEAR}${MONTH}${DAY}_${HOUR}.grib1_p6 ./2t_${YEAR}${MONTH}${DAY}_${HOUR}.grib
@@ -189,18 +189,18 @@ process_3h(){
 
 process_6h() {
 
-  DTG=$1
+  NDTG=$1
   LL=$2
-  DTG=$(mandtg $DTG + $LL)
-  YEAR=`mandtg -year $DTG`
-  MONTH=`mandtg -month $DTG`
-  DAY=`mandtg -day $DTG`
-  HOUR=`mandtg -hour $DTG`
+  NDTG=$(mandtg $NDTG + $LL)
+  YEAR=`mandtg -year $NDTG`
+  MONTH=`mandtg -month $NDTG`
+  DAY=`mandtg -day $NDTG`
+  HOUR=`mandtg -hour $NDTG`
   FCLENGTH=${MONTH}${DAY}${HOUR}
 
 #Take care of mx2t6 and mn2t6 for every 6'th hour step, should not be needed, only 00, 06, 12, 18 should be used after 144h.....
 # DTG_p6=`mandtg $DTG + 6` 
-  DTG_p6=`mandtg $DTG + 0`
+  DTG_p6=`mandtg $NDTG + 0`
   YEAR_p6=`mandtg -year $DTG_p6`
   MONTH_p6=`mandtg -month $DTG_p6`
   DAY_p6=`mandtg -day $DTG_p6`
@@ -275,8 +275,8 @@ process_6h() {
 #cdo ensmax -cat output_mx2t_*.grib test3.grib
 #cdo ensmean -cat output_mx2t_*.grib test3.grib
 
-    cdo ensmean -cat mx2t_*.grib prev12h_mx2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
-    cdo ensmean -cat mn2t_*.grib prev12h_mn2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
+    cdo ensmean mx2t_*.grib prev12h_mx2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
+    cdo ensmean mn2t_*.grib prev12h_mn2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
 
 #Select each parameter and put into new file-name
     cdo -select,name=var167 ${POSSE_EC}/TEMP_kriging/F5D_${YEAR}${MONTH}${DAY}_${HOUR}.grib1_p6 ./2t_${YEAR}${MONTH}${DAY}_${HOUR}.grib
