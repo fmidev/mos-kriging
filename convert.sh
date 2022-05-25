@@ -18,7 +18,7 @@ Datum=`echo $DTG |cut -c5-10`
 #*********************************************
 # Clean up old files, so they are not used....
 rm -rf ${POSSE_EC}/background/*.grib
-rm -rf ${POSSE_EC}/Comb/*.grib
+#rm -rf ${POSSE_EC}/Comb/*.grib
 rm -rf ${POSSE_EC}/TEMP_kriging/F5D*
 
 #*********************************************
@@ -100,14 +100,6 @@ process_3h(){
     cd $POSSE_EC/Comb
 
     #Calculate the average value over a set of time-steps, put into new file
-
-#Example singe files
-#cdo ensmax output_mx2t_03.grib output_mx2t_06.grib test2.grib
-#cdo ensmean output_mx2t_03.grib output_mx2t_06.grib test2.grib
-#Example with many files
-#cdo ensmax -cat output_mx2t_*.grib test3.grib
-#cdo ensmean -cat output_mx2t_*.grib test3.grib
-
     cdo ensmean -cat mx2t_*.grib prev12h_mx2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
     cdo ensmean -cat mn2t_*.grib prev12h_mn2t${YEAR}${MONTH}${DAY}_${HOUR}.grib
 
@@ -220,10 +212,10 @@ process_6h() {
   cd ${POSSE_EC}/TEMP_kriging/
 
   #Set correct stepRange to the analysis file
-#  grib_set -s stepRange=${LL} ${POSSE_EC}/F5D${Datum}00${Datum}001 ${POSSE_EC}/TEMP_kriging/F5D${Datum}00${Datum}001_an_${LL}
+  grib_set -s stepRange=${LL} ${POSSE_EC}/F5D${Datum}00${Datum}001 ${POSSE_EC}/TEMP_kriging/F5D${Datum}00${Datum}001_an_${LL}
 
   #Copy the analysis file into the fc-file
-#  grib_copy ${POSSE_EC}/TEMP_kriging/F5D${Datum}00${Datum}001_an_${LL} ${POSSE_EC}/F5D${Datum}00${FCLENGTH}001 ${POSSE_EC}/TEMP_kriging/F5D_${YEAR}${MONTH}${DAY}_${HOUR}.grib1
+  grib_copy ${POSSE_EC}/TEMP_kriging/F5D${Datum}00${Datum}001_an_${LL} ${POSSE_EC}/F5D${Datum}00${FCLENGTH}001 ${POSSE_EC}/TEMP_kriging/F5D_${YEAR}${MONTH}${DAY}_${HOUR}.grib1
 
 #########
   #If it is hour: 03, 09, 15 or 21, then the mx2t6and mn2t6 are missing and needs to be copied into these GRIB-files (Note: copied from the NEXT time-step!!
@@ -376,11 +368,15 @@ sh /tmp/download-background.sh $DTG 0
 for LL in $*; do 
   sh /tmp/download-background.sh $DTG $LL
   STEP=3
-  if [ $LL -gt 144 ]; then
+  if [ $LL -ge 144 ]; then
     STEP=6
   fi
 
-  sh /tmp/download-background.sh $DTG `expr $LL + $STEP`
+  NEXT_STEP=`expr $LL + $STEP`
+
+  if [ $NEXT_STEP -le 240 ]; then
+    sh /tmp/download-background.sh $DTG $NEXT_STEP
+  fi
 
   if [ $LL -gt 144 ]; then
     process_6h $DTG $LL
