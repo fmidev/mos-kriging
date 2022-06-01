@@ -13,7 +13,7 @@ download() {
   fi
 
   set -x
-  curl --fail --show-error -o /tmp/mos/$file https://lake.fmi.fi/routines-data/mos/csv/$file
+  curl --fail --show-error -o /tmp/mos/$file https://lake.fmi.fi/routines-data/mos/csv/$TYPE/$file
 
 }
 
