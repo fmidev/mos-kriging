@@ -35,12 +35,12 @@ do_kriging(){
   DTG=$1
   LL=$2
 
-  # After 144 hours steprange change to 6h interval
-  if [ "$LL" -lt "144" ]
-  then
-    LLINT=3
-  else
+  LLINT=1
+
+  if [ "$LL" -gt "144" ]; then
     LLINT=6
+  elif [ "$LL" -gt "90" ]; then
+    LLINT=3
   fi
 
   FCDTG=`mandtg $DTG + $LL`
