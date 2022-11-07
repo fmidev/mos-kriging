@@ -22,10 +22,9 @@ fix_grib_metadata(){
 
   dataDate=$(echo $DTG | cut -c 1-8)
   dataTime=$(echo 100 \* $(echo $DTG | cut -c 9-10) | bc)
-#  grib_set -s indicatorOfTypeOfLevel=105,centre=86,generatingProcessIdentifier=$producer_id,dataDate=$dataDate,dataTime=$dataTime,startStep=$fstep,endStep=$LL $filein.orig $filein
 
   grib_set -S -s indicatorOfTypeOfLevel=105,centre=86,generatingProcessIdentifier=$producer_id,dataDate=$dataDate,dataTime=$dataTime,startStep=$LL,endStep=$LL,timeRangeIndicator=0 -w indicatorOfParameter=167/168/129 $filein out-instant.grib
-  grib_set -S -s indicatorOfTypeOfLevel=105,centre=86,generatingProcessIdentifier=$producer_id,dataDate=$dataDate,dataTime=$dataTime,timeRangeIndicator=2 -w indicatorOfParameter=mn2t/mx2t $filein out-aggregated.grib
+  grib_set -S -s indicatorOfTypeOfLevel=105,centre=86,generatingProcessIdentifier=$producer_id,dataDate=$dataDate,dataTime=$dataTime,endStep=$LL,timeRangeIndicator=2 -w indicatorOfParameter=mn2t/mx2t $filein out-aggregated.grib
 
   grib_set -s level=2 -w shortName!=z out-*.grib $filein
 

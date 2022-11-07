@@ -1,6 +1,6 @@
 set -eux
 
-DTG=$1
+export DTG=$1
 
 shift
 
