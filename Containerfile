@@ -31,7 +31,7 @@ RUN dnf -y install dnf-plugins-core && \
     && dnf clean all && rm -rf /var/cache/yum
 
 ENV LC_ALL=C
-ENV MAKE="make -j 2"
+ENV MAKE="make -j 4"
 RUN R -e 'install.packages(c("devtools","optparse","sp","rgeos","rgdal","raster","aws.s3","outliers","ncdf4","gstat","spatstat","geogrid"),repos="http://ftp.eenet.ee/pub/cran/",build_vignettes=F)'
 RUN R -e 'devtools::install_github(c("mjlaine/fastgrid","harphub/Rgrib2","fmidev/MOSfieldutils"),build_vignettes=F)'
 
