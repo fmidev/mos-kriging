@@ -18,7 +18,7 @@ download() {
   fi
 
   set -x
-  curl --fail --show-error -o $path/$file https://lake.fmi.fi/routines-data/mos/background/$1/$file
+  curl --fail --show-error -o $path/$file https://lake.fmi.fi/routines-data/mos/background/$TYPE/$1/$file
 
 }
 
